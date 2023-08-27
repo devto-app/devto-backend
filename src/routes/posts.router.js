@@ -36,4 +36,23 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.patch('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        const postUpdated = await posts.updateById(id, data);
+        res.json({
+            message: 'Post updated',
+            data: { post: postUpdated },
+        });
+    } catch (error) {
+        res.status(error.status || 500);
+        res -
+            json({
+                messag: 'Something went wrong 😬',
+                error: error.message,
+            });
+    }
+});
+
 module.exports = router;
