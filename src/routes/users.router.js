@@ -45,4 +45,21 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const getUserById = await users.getById(id);
+        res.json({
+            message: `Get user ${getUserById.name} from UsersDB`,
+            data: { user: getUserById },
+        });
+    } catch (error) {
+        res.status(error.status || 500);
+        res.json({
+            message: 'Something went wrong 😭',
+            error: error.message,
+        });
+    }
+});
+
 module.exports = router;

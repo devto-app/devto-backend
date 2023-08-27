@@ -11,4 +11,9 @@ async function create(userData) {
     return newUser;
 }
 
-module.exports = { getAll, create };
+async function getById(id) {
+    const user = await User.findById(id);
+    return user;
+}
+
+module.exports = { getAll, create, getById };
