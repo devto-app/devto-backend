@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     try {
         const allUsers = await users.getAll();
         res.json({
-            message: 'GET all users fromd UsersDB',
+            message: 'Get all users from UsersDB',
             data: { users: allUsers },
         });
     } catch (error) {
