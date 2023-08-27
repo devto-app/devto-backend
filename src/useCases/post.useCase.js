@@ -20,8 +20,8 @@ async function create(postData) {
     return await Post.create(postData);
 }
 
-async function updateById(id, dataToUpdate) {
-    if (!mongoose.isValidObjectId(id)) {
+async function updateById(postId, dataToUpdate) {
+    if (!mongoose.isValidObjectId(postId)) {
         throw new createError(400, 'Invalid id');
     }
     if (dataToUpdate.user) {
@@ -36,7 +36,7 @@ async function updateById(id, dataToUpdate) {
 
     dataToUpdate.modified = new Date();
 
-    const postUpdated = await Post.findByIdAndUpdate(id, dataToUpdate, {
+    const postUpdated = await Post.findByIdAndUpdate(postId, dataToUpdate, {
         new: true,
         runValidator: true,
     });
@@ -46,4 +46,15 @@ async function updateById(id, dataToUpdate) {
     return postUpdated;
 }
 
-module.exports = { getAll, create, updateById };
+async function removeById(postId) {
+    if (!mongoose.isValidObjectId(postId)) {
+        throw new createError(400, 'Invalid id');
+    }
+    const postRemoved = await Post.findByIdAndDelete(postId);
+    if (!postRemoved) {
+        throw new createError(404, 'Post not found');
+    }
+    return postRemoved;
+}
+
+module.exports = { getAll, create, updateById, removeById };

@@ -55,4 +55,21 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const postDeletedById = await posts.removeById(id);
+        res.json({
+            message: 'Post deleted',
+            data: { post: postDeletedById },
+        });
+    } catch (error) {
+        res.status(error.status || 500);
+        res.json({
+            message: 'Something went wrong 🫥',
+            error: error.message,
+        });
+    }
+});
+
 module.exports = router;
