@@ -4,9 +4,15 @@ const Post = require('../models/post.model');
 const User = require('../models/user.model');
 const createError = require('http-errors');
 
-async function getAll() {
-    // filter + RegExp + isValidObject + populate
-    return await Post.find();
+async function getAll(title, user) {
+    const filters = {};
+    if (title) {
+        filters.title = new RegExp(title, 'i');
+    }
+    if (user && mongoose.isValidObjectId(user)) {
+        filters.user = user;
+    }
+    return await Post.find(filters).populate('user');
 }
 
 async function create(postData) {

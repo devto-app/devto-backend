@@ -5,7 +5,8 @@ const posts = require('../useCases/post.useCase');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const allPosts = await posts.getAll();
+    const { title, user } = req.query;
+    const allPosts = await posts.getAll(title, user);
     res.json({
         message: 'Get all posts from PostsDB',
         data: { posts: allPosts },
