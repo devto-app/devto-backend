@@ -1,10 +1,11 @@
 const express = require('express');
 
 const posts = require('../useCases/post.useCase');
+const auth = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const { title, user } = req.query;
     const allPosts = await posts.getAll(title, user);
     res.json({
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
         const { title, img, body, user } = req.body;
         const postCreated = await posts.create({
@@ -37,7 +38,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', auth, async (req, res) => {
     try {
         const { id } = req.params;
         const data = req.body;
@@ -48,15 +49,14 @@ router.patch('/:id', async (req, res) => {
         });
     } catch (error) {
         res.status(error.status || 500);
-        res -
-            json({
-                messag: 'Something went wrong 😬',
-                error: error.message,
-            });
+        res.json({
+            messag: 'Something went wrong 😬',
+            error: error.message,
+        });
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     try {
         const { id } = req.params;
         const postDeletedById = await posts.removeById(id);
